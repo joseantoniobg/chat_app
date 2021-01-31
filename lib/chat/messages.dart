@@ -33,10 +33,14 @@ class Messages extends StatelessWidget {
                 chatDocs[index]['text'],
                 chatDocs[index]['userId'],
                 chatDocs[index]['userId'] == userSnapshot.data.uid,
+                chatDocs[index]['profilePic'],
                 chatDocs[index]['dateTime'],
                 index < chatDocs.length - 1
                     ? chatDocs[index + 1]['dateTime']
                     : null,
+                index < chatDocs.length - 1
+                    ? chatDocs[index + 1]['userId']
+                    : '',
                 index > 0 ? chatDocs[index - 1]['dateTime'] : null,
                 key: ValueKey(chatDocs[index].documentID),
               ),

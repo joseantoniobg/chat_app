@@ -1,6 +1,5 @@
 import 'package:chat_app/providers/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
@@ -14,13 +13,13 @@ class _NewMessageState extends State<NewMessage> {
 
   Future<void> _sendMessage() async {
     FocusScope.of(context).unfocus();
-    final user = await FirebaseAuth.instance.currentUser();
-    final username = await AuthProvider.getUsername(user.uid);
+    final username = await AuthProvider.getUsername();
     Firestore.instance.collection('chats').add({
       'text': _enteredMessage,
       'dateTime': Timestamp.now(),
-      'userId': user.uid,
+      'userId': AuthProvider.id,
       'username': username,
+      'profilePic': AuthProvider.userProfilePic,
     });
     _textMessageController.clear();
     setState(() {

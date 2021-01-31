@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:chat_app/providers/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -29,15 +31,31 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         result = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
-      }
 
-      await Firestore.instance
-          .collection('users')
-          .document(result.user.uid)
-          .setData({
-        'username': username,
-        'email': email,
-      });
+        AuthProvider.id = result.user.uid;
+        AuthProvider.lastId = result.user.uid;
+        AuthProvider.username = username;
+
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('user_images')
+            .child(result.user.uid + '.jpg');
+
+        await ref.putFile(userPic).onComplete;
+
+        final url = await ref.getDownloadURL();
+
+        AuthProvider.userProfilePic = url;
+
+        await Firestore.instance
+            .collection('users')
+            .document(result.user.uid)
+            .setData({
+          'username': username,
+          'email': email,
+          'profilePic': url,
+        });
+      }
 
       return true;
     } on PlatformException catch (err) {
