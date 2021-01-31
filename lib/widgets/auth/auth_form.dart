@@ -1,6 +1,8 @@
+import 'dart:io';
+
+import '../../pickers/user_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:future_button/future_button.dart';
-import 'package:progress_indicators/progress_indicators.dart';
 
 class AuthForm extends StatefulWidget {
   final Future<bool> Function(
@@ -8,6 +10,7 @@ class AuthForm extends StatefulWidget {
     String username,
     String password,
     bool isLogin,
+    File userPic,
     BuildContext ctx,
   ) submitData;
   AuthForm(this.submitData);
@@ -22,14 +25,54 @@ class _AuthFormState extends State<AuthForm> {
   String _userEmail = '';
   String _userName = '';
   String _userPassword = '';
+  File _pickeImage;
   bool _isSaving = false;
 
+  File pickedImage(File img) {
+    _pickeImage = img;
+  }
+
   Future<void> _trySubmit() async {
+    FocusScope.of(context).unfocus();
+    try {
+      if (_pickeImage == null && !_isLogin) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('Plase take a picture'),
+          backgroundColor: Theme.of(context).errorColor,
+        ));
+        throw Exception();
+        // return showDialog<void>(
+        //   context: context,
+        //   barrierDismissible: false, // user must tap button!
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: Text('Missing Profile Image'),
+        //       content: SingleChildScrollView(
+        //         child: ListBody(
+        //           children: <Widget>[
+        //             Text('Plase take a pic'),
+        //           ],
+        //         ),
+        //       ),
+        //       actions: <Widget>[
+        //         TextButton(
+        //           child: Text('OK'),
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+      }
+    } catch (error) {
+      throw error;
+    }
     final isValid = _formKey.currentState.validate();
     setState(() {
       _isSaving = true;
     });
-    FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState.save();
       try {
@@ -38,6 +81,7 @@ class _AuthFormState extends State<AuthForm> {
           _userName.trim(),
           _userPassword.trim(),
           _isLogin,
+          _pickeImage,
           context,
         );
       } catch (err) {
@@ -66,6 +110,7 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (!_isLogin) UserImagePicker(pickedImage),
                   TextFormField(
                     key: ValueKey('email'),
                     validator: (typedText) {

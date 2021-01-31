@@ -1,9 +1,13 @@
-import 'package:chat_app/config/consts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../chat/new_message.dart';
+import '../chat/messages.dart';
+import '../config/consts.dart';
+
 class ChatScreen extends StatelessWidget {
+  ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,25 +42,20 @@ class ChatScreen extends StatelessWidget {
               }),
         ],
       ),
-      body: StreamBuilder(
-          stream: Firestore.instance
-              .collection(Consts.messagesCollection)
-              .snapshots(),
-          builder: (ctx, snap) {
-            final docs = snap.data.documents;
-            if (snap.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.builder(
-              itemBuilder: (ctx, i) => Container(
-                padding: EdgeInsets.all(8),
-                child: Text(docs[i]['text']),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: Messages(),
               ),
-              itemCount: docs.length,
-            );
-          }),
+            ),
+            NewMessage(),
+          ],
+        ),
+      ),
       // floatingActionButton: FloatingActionButton(
       //   child: Icon(Icons.add),
       //   onPressed: () async {

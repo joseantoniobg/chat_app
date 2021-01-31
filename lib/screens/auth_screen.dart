@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String username,
     String password,
     bool isLogin,
+    File userPic,
     BuildContext ctx,
   ) async {
     AuthResult result;
