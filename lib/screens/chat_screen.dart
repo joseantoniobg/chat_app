@@ -46,16 +46,19 @@ class _ChatScreenState extends State<ChatScreen> {
           }
           return Scaffold(
             appBar: AppBar(
-              title: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(AuthProvider.userProfilePic),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('My chat! - ' + AuthProvider.username),
-                ],
+              title: FittedBox(
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(AuthProvider.userProfilePic),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text('My chat! - ' + AuthProvider.username),
+                  ],
+                ),
               ),
               actions: [
                 DropdownButton(

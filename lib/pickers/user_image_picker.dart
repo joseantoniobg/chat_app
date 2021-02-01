@@ -38,22 +38,25 @@ class _UserImagePickerState extends State<UserImagePicker> {
           backgroundImage:
               _pickedImage != null ? FileImage(_pickedImage) : null,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FlatButton.icon(
-              textColor: Theme.of(context).primaryColor,
-              icon: Icon(Icons.camera_alt),
-              onPressed: () => pickImage(true),
-              label: Text('Take a Picture'),
-            ),
-            FlatButton.icon(
-              textColor: Theme.of(context).primaryColor,
-              icon: Icon(Icons.image),
-              onPressed: () => pickImage(false),
-              label: Text('Choose from Gallery'),
-            ),
-          ],
+        FittedBox(
+          fit: BoxFit.contain,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FlatButton.icon(
+                textColor: Theme.of(context).primaryColor,
+                icon: Icon(Icons.camera_alt),
+                onPressed: () => pickImage(true),
+                label: Text('Take a Picture'),
+              ),
+              FlatButton.icon(
+                textColor: Theme.of(context).primaryColor,
+                icon: Icon(Icons.image),
+                onPressed: () => pickImage(false),
+                label: Text('Choose from Gallery'),
+              ),
+            ],
+          ),
         ),
       ],
     );
