@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class MessageBubble extends StatefulWidget {
   final Key key;
   final String message;
+  final String realUsername;
   final String username;
   final bool isMe;
   final String profilePic;
@@ -15,6 +16,7 @@ class MessageBubble extends StatefulWidget {
 
   MessageBubble(
       this.message,
+      this.realUsername,
       this.username,
       this.isMe,
       this.profilePic,
@@ -93,7 +95,6 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
         (_) => _rowHeight.value = _key.currentContext.size.longestSide);
@@ -155,8 +156,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                       constraints: BoxConstraints(
                           minWidth: widget.isMe
                               ? 0
-                              : widget.username.length > 10
-                                  ? 80
+                              : widget.realUsername.length > 10
+                                  ? 100
                                   : 70,
                           maxWidth: 300),
                       padding: EdgeInsets.only(
@@ -166,7 +167,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                         right: 15,
                       ),
                       margin: EdgeInsets.only(
-                        top: widget.isMe ? 4 : 10,
+                        top: widget.isMe ? 4 : 20,
                         left: 8,
                         right: 8,
                         bottom: _sameDatetime() ? 0 : 4,
@@ -226,7 +227,7 @@ class _MessageBubbleState extends State<MessageBubble> {
               valueListenable: _rowHeight,
               builder: (BuildContext context, double height, Widget child) {
                 return Positioned(
-                  top: -5,
+                  top: _timeSeparator() != '' ? 30 : 5,
                   left: _rowHeight.value - 23,
                   child: CircleAvatar(
                     radius: 15,

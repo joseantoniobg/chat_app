@@ -19,6 +19,9 @@ class _UserImagePickerState extends State<UserImagePicker> {
       imageQuality: 50,
       maxWidth: 250,
     );
+    if (_pickedImage == null) {
+      return;
+    }
     setState(() {
       _pickedImage = File(pickedImage.path);
     });
